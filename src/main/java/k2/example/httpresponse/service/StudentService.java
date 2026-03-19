@@ -14,6 +14,11 @@ public class StudentService {
         this.repository = repository;
     }
 
+    public List<Student> addAndGetStudents(List<Student> students) {
+        repository.addStudents(students);
+        return repository.getAllStudents();
+    }
+
     public String getStudentNames() {
         List<Student> students = repository.getAllStudents();
         StringBuilder names = new StringBuilder();
@@ -21,11 +26,7 @@ public class StudentService {
         for (Student s : students) {
             names.append(s.getFirstName()).append(" ").append(s.getLastName()).append("\n");
         }
-        return names.toString();
-    }
 
-    public String addAndGetStudents(List<Student> students) {
-        repository.addStudents(students);
-        return getStudentNames();
+        return names.toString();
     }
 }
