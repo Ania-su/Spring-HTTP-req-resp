@@ -18,4 +18,12 @@ public class StudentController {
     public String addStudents(@RequestBody List<Student> students) {
         return service.addAndGetStudents(students);
     }
+
+    @GetMapping("/students")
+    public String getStudents(@RequestHeader(value = "Accept", defaultValue = "text/plain") String accept) {
+        if (!accept.contains("text/plain")) {
+            return "Unsupported Format";
+        }
+        return service.getStudentNames();
+    }
 }
