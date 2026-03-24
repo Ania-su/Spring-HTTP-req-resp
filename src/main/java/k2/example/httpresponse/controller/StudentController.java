@@ -30,11 +30,11 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public ResponseEntity<String> getStudents(@RequestHeader(value = "Accept", defaultValue = "text/plain") String accept) {
+    public ResponseEntity<List<Student>> getStudents(@RequestHeader(value = "Accept", defaultValue = "text/plain") String accept) {
         StudentRepository repository = new StudentRepository();
         try {
             if (accept == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing Accept Header");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
 
             if (accept.equals("text/plain")) {
@@ -43,19 +43,18 @@ public class StudentController {
                 repository.getAllStudents().forEach(s ->
                         names.append(s.getFirstName()).append(" ").append(s.getLastName()).append("\n")
                 );
-                return ResponseEntity.ok().body(names.toString());
+                return ResponseEntity.ok().build();
 
             }
             else if (accept.equals("application/json")) {
                 List<Student> students = repository.getAllStudents();
-                return ResponseEntity.ok(students.toString());
+                return ResponseEntity.ok(students);
             }
             else {
-                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED)
-                        .body("Unsupported Format");
+                return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
